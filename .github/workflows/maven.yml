@@ -15,25 +15,35 @@ on:
 defaults:
   run:
     shell: bash
-    working-directory: ./green-sorting-experiment-java-${{ inputs.framework }}
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v7
-    
-    - name: Set up JDK ${{ inputs.framework }}
-      uses: actions/setup-java@v4
-      with:
-        java-version: ${{ inputs.framework }}
-        distribution: 'temurin'
-        cache: maven
-        
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      - uses: actions/checkout@v4
 
-    - name: Update dependency graph
-      uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
+      - name: Define working directory
+        run: |
+          if [ "${{ inputs.framework }}" = "17" ]; then
+            echo "WORK_DIR=./green-sorting-experiment-java-17" >> $GITHUB_ENV
+          elif [ "${{ inputs.framework }}" = "21" ]; then
+            echo "WORK_DIR=./green-sorting-experiment-java-21" >> $GITHUB_ENV
+          elif [ "${{ inputs.framework }}" = "25" ]; then
+            echo "WORK_DIR=./green-sorting-experiment-java-25" >> $GITHUB_ENV
+          fi
+
+      - name: Set up JDK ${{ inputs.framework }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ inputs.framework }}
+          distribution: temurin
+          cache: maven
+
+      - name: Build with Maven
+        working-directory: ${{ env.WORK_DIR }}
+        run: mvn -B package --file pom.xml
+
+      - name: Update dependency graph
+        working-directory: ${{ env.WORK_DIR }}
+        uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
