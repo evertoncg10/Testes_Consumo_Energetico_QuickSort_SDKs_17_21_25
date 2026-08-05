@@ -9,7 +9,11 @@ on:
   workflow_dispatch:
     inputs:
       framework:
-        type: number
+        type: choice
+        options:
+          - 17
+          - 21
+          - 25
         description: 'Java Framework Version'
 
 defaults:
