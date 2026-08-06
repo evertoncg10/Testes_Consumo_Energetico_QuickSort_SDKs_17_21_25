@@ -43,7 +43,7 @@ jobs:
 
       - name: Build with Maven
         working-directory: ${{ env.WORK_DIR }}
-        run: mvn -B package --file pom.xml -DskipTests
+        run: mvn -DskipTests -B package --file pom.xml
 
       # - name: Update dependency graph
       #   working-directory: ${{ env.WORK_DIR }}
