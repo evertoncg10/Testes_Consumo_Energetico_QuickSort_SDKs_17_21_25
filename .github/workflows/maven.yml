@@ -1,4 +1,5 @@
-name: Java ${{ inputs.framework }} CI with Maven
+name: Java CI with Maven
+run-name: Java ${{ inputs.framework }} with Maven
 
 on:
 
